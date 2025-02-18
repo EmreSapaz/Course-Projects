@@ -10,9 +10,9 @@ tim = Turtle()
 
 tim.pensize(20)
 num = 0
-
+tim.hideturtle()
+tim.speed("fastest")
 tim.teleport(-200,-200)
-
 x = tim.pos()[0]
 y = tim.pos()[1]
 
@@ -32,6 +32,5 @@ for j in range(10):
             num = 0
     tim.teleport(x,y+50)
     y += 50
-
 
 screen.exitonclick()
