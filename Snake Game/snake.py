@@ -1,13 +1,13 @@
 from turtle import Turtle
 
 START_POSITION = [(0,0),(-20,0),(-40,0)]
-MOVE_DISTANCE = 20
 
 class Snake:
     def __init__(self):
         self.segments = []
         self.create_snake()
         self.head = self.segments[0]
+        self.speed = 10
 
     def create_snake(self):
         for position in START_POSITION:
@@ -29,7 +29,7 @@ class Snake:
             new_x = self.segments[seg_num - 1].xcor()
             new_y = self.segments[seg_num - 1].ycor()
             self.segments[seg_num].goto(new_x, new_y)
-        self.head.forward(MOVE_DISTANCE)
+        self.head.forward(self.speed)
 
     def up(self):
         if self.head.heading() != 270:
@@ -46,3 +46,6 @@ class Snake:
     def left(self):
         if self.head.heading() != 0 or self.head.heading() != 360:
             self.head.setheading(180)
+
+    def increase_speed(self):
+        self.speed += 2
