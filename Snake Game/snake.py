@@ -7,7 +7,7 @@ class Snake:
         self.segments = []
         self.create_snake()
         self.head = self.segments[0]
-        self.speed = 10
+        self.speed = 20
 
     def create_snake(self):
         for position in START_POSITION:
@@ -48,4 +48,4 @@ class Snake:
             self.head.setheading(180)
 
     def increase_speed(self):
-        self.speed += 2
+        self.speed += 5
