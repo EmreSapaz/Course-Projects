@@ -18,7 +18,6 @@ l_paddle = Paddle(-570,0)
 ball = Ball()
 scoreboard = Scoreboard()
 change_direction = ["Up","Down","Right","Left"]
-change_speed = ["True","False"]
 
 screen.onkey(l_paddle.move_paddle_up,"w")
 screen.onkey(r_paddle.move_paddle_up,"Up")
@@ -48,9 +47,7 @@ while game_is_on:
 
         if random.choice(change_direction) == "Up" or random.choice(change_direction) == "Down":
             ball.bounce_y()
-
-        if random.choice(change_speed) == "True":
-            ball.increase_speed()
+        ball.set_speed()
 
     if ball.xcor() < -650 :
         scoreboard.increase_score_player()
@@ -64,8 +61,7 @@ while game_is_on:
         if random.choice(change_direction) == "Up" or random.choice(change_direction) == "Down":
             ball.bounce_y()
 
-        if random.choice(change_speed) == "True":
-            ball.increase_speed()
+        ball.set_speed()
 
     if ball.distance(r_paddle) < 60 and ball.xcor() > 550 :
         ball.bounce_x()
