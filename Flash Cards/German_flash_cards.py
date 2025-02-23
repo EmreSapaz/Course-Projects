@@ -34,7 +34,7 @@ def discard_card():
     global current_card
     dictionary.remove(current_card)
     learn_data = pandas.DataFrame(dictionary)
-    learn_data.to_csv("words_to_learn.csv")
+    learn_data.to_csv("words_to_learn.csv",index=False)
     next_card()
 # --------------------------- UI SETUP --------------------------------- #
 window = Tk()
