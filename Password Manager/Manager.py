@@ -28,7 +28,7 @@ def password_generator():
     pyperclip.copy(password)
 # ---------------------------- SAVE PASSWORD ------------------------------------ #
 def save_password(x: Entry, y: Entry, z: Entry):
-    if len(x.get()) == 0 or len(z.get()) == 0:
+    if len(x.get()) == 0 or len(y.get()) == 0 or len(z.get()) == 0:
         messagebox.showwarning("Empty Space", "Do Not Leave Any Field Empty !")
     else:
         confirm = messagebox.askyesno("Confirmation", "Do You Confirm?")
@@ -37,6 +37,7 @@ def save_password(x: Entry, y: Entry, z: Entry):
             with open("password.txt", "a+", encoding="utf-8") as file:
                 file.write(f"{x.get()} | {y.get()} | {z.get()} \n")
             x.delete(0, END)
+            y.delete(0,END)
             z.delete(0, END)
 # ---------------------------- UI SETUP ---------------------------------------- #
 window = Tk()
