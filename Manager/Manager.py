@@ -7,6 +7,9 @@ import json
 # ---------------------------- CONSTANTS ---------------------------------------- #
 BG_COLOR = "#D1F8EF"
 BLACK = "#000000"
+ENTRY_COLOR = "#F8F3D9"
+BUTTON_COLOR = "#A9B5DF"
+BUTTON_BASIC = "#E8F9FF"
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
            'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
            'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
@@ -14,17 +17,31 @@ letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
            'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+# ---------------------------- FINDER --------------------------------------------#
+def find_password():
+    website = website_text.get()
+    try:
+        with open("password.json","r",encoding="utf-8") as password_file:
+            data = json.load(password_file)
+        if website in data:
+            mail = data[website]["mail"]
+            password = data[website]["password"]
+            messagebox.showinfo(title=website, message=f"Email: {mail}\nPassword: {password}")
+        else:
+            messagebox.showwarning("Not Found","No Details About The Website")
+    except (FileNotFoundError,json.JSONDecoder):
+        messagebox.showwarning("Error","File Not Found Or Corrupted")
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def password_generator():
     password_text.delete(0,END)
-    password_list_letter = [l for _ in range(random.randint(6,8)) for l in random.choice(letters)]
-    password_list_symbol = [l for _ in range(random.randint(2, 4)) for l in random.choice(symbols)]
-    password_list_number = [l for _ in range(random.randint(2, 4)) for l in random.choice(numbers)]
-    password_list = password_list_number + password_list_symbol + password_list_letter
+
+    password_list = ([random.choice(letters) for _ in range(random.randint(6, 8))] +
+    [random.choice(symbols) for _ in range(random.randint(2, 4))]+
+    [random.choice(numbers) for _ in range(random.randint(2, 4))])
+
     random.shuffle(password_list)
-    password = ""
-    for i in password_list:
-        password += i
+    password = "".join(password_list)
+
     password_text.insert(0,password)
     pyperclip.copy(password)
 # ---------------------------- SAVE PASSWORD ------------------------------------ #
@@ -44,14 +61,19 @@ def save_password():
         confirm = messagebox.askyesno("Confirmation", "Do You Confirm?")
 
         if confirm:
-            with open("password.json", "r+", encoding="utf-8") as file:
-                data = json.load(file)
-                data.update(new_data)
+            try:
+                with open("password.json", "r+", encoding="utf-8") as file:
+                    data = json.load(file)
+            except (FileNotFoundError,json.JSONDecodeError) :
+                data = {}
+
+            data.update(new_data)
             with open("password.json", "w", encoding="utf-8") as file:
-                json.dump(data,file,indent=4)
-                website_text.delete(0, END)
-                mail_text.delete(0,END)
-                password_text.delete(0, END)
+                json.dump(data, file,indent=4)
+
+            website_text.delete(0, END)
+            mail_text.delete(0,END)
+            password_text.delete(0, END)
 # ---------------------------- UI SETUP ---------------------------------------- #
 window = Tk()
 window.title("Password Manager")
@@ -75,27 +97,32 @@ password_label.grid(padx=5, pady=5, column=2, row=3)
 
 # Entry #
 website_text = Entry()
-website_text.config(width=60)
-website_text.grid(padx=5, pady=5, column=3, row=1, columnspan=2)
+website_text.config(width=40,bg=ENTRY_COLOR)
+website_text.grid(padx=5, pady=5, column=3, row=1)
 website_text.focus()
 
 mail_text = Entry()
-mail_text.config(width=60)
+mail_text.config(width=60,bg=ENTRY_COLOR)
 mail_text.grid(padx=5, pady=5, column=3, row=2, columnspan=2)
 
 password_text = Entry()
-password_text.config(width=40)
+password_text.config(width=40,bg=ENTRY_COLOR)
 password_text.grid(padx=5, pady=5, column=3, row=3)
 
 # Buttons #
 generate_password_button = Button(text="Generate Password", highlightthickness=0,
                                   command = lambda : password_generator())
-generate_password_button.config(width=15)
+generate_password_button.config(width=15,bg=BUTTON_BASIC,activebackground=BUTTON_COLOR)
 generate_password_button.grid(padx=5, pady=5, column=4, row=3)
 
 add_button = Button(text="Add", highlightthickness=0,
                     command= lambda : save_password())
-add_button.config(width=52)
+add_button.config(width=52,bg=BUTTON_BASIC,activebackground=BUTTON_COLOR)
 add_button.grid(padx=5, pady=5, column=3, row=5, columnspan=2)
+
+find_button = Button(text="Search", highlightthickness=0,
+                    command= lambda : find_password())
+find_button.config(width=15,bg=BUTTON_BASIC,activebackground=BUTTON_COLOR)
+find_button.grid(padx=5, pady=5, column=4, row=1)
 
 window.mainloop()
