@@ -16,9 +16,9 @@ symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def password_generator():
     password_text.delete(0,END)
-    password_list_letter = [l for i in range(random.randint(6,8)) for l in random.choice(letters)]
-    password_list_symbol = [l for i in range(random.randint(2, 4)) for l in random.choice(symbols)]
-    password_list_number = [l for i in range(random.randint(2, 4)) for l in random.choice(numbers)]
+    password_list_letter = [l for _ in range(random.randint(6,8)) for l in random.choice(letters)]
+    password_list_symbol = [l for _ in range(random.randint(2, 4)) for l in random.choice(symbols)]
+    password_list_number = [l for _ in range(random.randint(2, 4)) for l in random.choice(numbers)]
     password_list = password_list_number + password_list_symbol + password_list_letter
     random.shuffle(password_list)
     password = ""
@@ -68,7 +68,6 @@ website_text.focus()
 mail_text = Entry()
 mail_text.config(width=60)
 mail_text.grid(padx=5, pady=5, column=3, row=2, columnspan=2)
-mail_text.insert(0, "sapazemre@gmail.com")
 
 password_text = Entry()
 password_text.config(width=40)
