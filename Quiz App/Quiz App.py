@@ -5,19 +5,27 @@ import random
 
 BG_COLOR = "#27667B"
 SCREEN_COLOR = "#F2EFE7"
-random_pair = random.choice(question_answer_pair)
-question = random_pair[0]
-answer = random_pair[1]
+num_of_questions = 0
+question = question_answer_pair[num_of_questions][0]
+answer = question_answer_pair[num_of_questions][1]
 SCORE : int = 0
+length = len(question_answer_pair)
 # ---------------------------------- NEXT QUESTION ----------------------- #
 def next_question():
-    global answer,question
-    canvas.config(bg=SCREEN_COLOR)
-    new_question_pair = random.choice(question_answer_pair)
-    new_question = new_question_pair[0]
-    new_answer = new_question_pair[1]
-    answer = new_answer
-    canvas.itemconfig(question_text,text=f"{new_question}")
+    global answer,question,num_of_questions
+    if num_of_questions + 1 < length:
+        true_button.config(state="active")
+        false_button.config(state="active")
+        canvas.config(bg=SCREEN_COLOR)
+        num_of_questions += 1
+        new_question = question_answer_pair[num_of_questions][0]
+        new_answer = question_answer_pair[num_of_questions][1]
+        answer = new_answer
+        canvas.itemconfig(question_text,text=f"{new_question}")
+
+    else:
+        canvas.config(bg=SCREEN_COLOR)
+        canvas.itemconfig(question_text,text="You Reached the End of the Quiz\n                  Thank you")
 # --------------------------------- BUTTON FUNCTIONS --------------------- #
 def right():
     global SCORE
@@ -25,8 +33,12 @@ def right():
         SCORE += 1
         canvas.config(bg="green")
         score.config(text=f"Score : {SCORE}")
+        true_button.config(state="disabled")
+        false_button.config(state="disabled")
     else:
         canvas.config(bg="red")
+        true_button.config(state="disabled")
+        false_button.config(state="disabled")
     window.after(1000,next_question)
 
 
@@ -36,8 +48,12 @@ def wrong():
         SCORE += 1
         canvas.config(bg="green")
         score.config(text=f"Score : {SCORE}")
+        true_button.config(state="disabled")
+        false_button.config(state="disabled")
     else:
         canvas.config(bg="red")
+        true_button.config(state="disabled")
+        false_button.config(state="disabled")
     window.after(1000,next_question)
 # ---------------------------------- UI ---------------------------------- #
 window = Tk()
